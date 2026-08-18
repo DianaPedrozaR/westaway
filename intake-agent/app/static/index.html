@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Westaway — The startup law firm for founders that change the world</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="bg-white text-navy font-sans antialiased">
+    <header class="border-b border-gray-200">
+      <nav class="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
+        <div class="flex items-center">
+          <img src="/assets/westaway-logo.png" alt="Westaway" class="h-12 w-auto" />
+        </div>
+        <div class="hidden md:flex items-center gap-8 text-xs font-semibold tracking-widest uppercase text-navy">
+          <a href="#" class="hover:text-accent">General Counsel</a>
+          <a href="#" class="hover:text-accent">Flat Fees</a>
+          <a href="#" class="hover:text-accent">Resources</a>
+        </div>
+        <button
+          id="open-chat-nav"
+          class="bg-accent text-white text-xs font-bold uppercase tracking-widest px-5 py-3"
+        >
+          Book Free Consult
+        </button>
+      </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-24 md:py-32">
+      <h1 class="text-4xl md:text-6xl font-bold leading-tight max-w-3xl">
+        The startup law firm for founders that
+        <span class="relative inline-block">
+          change the world.
+          <span class="absolute left-0 -bottom-1 w-full h-1.5 bg-accent"></span>
+        </span>
+      </h1>
+      <p class="mt-8 text-accent font-bold uppercase tracking-widest text-xs">
+        $100M+ raised &middot; $1B+ closed
+      </p>
+      <div class="mt-10 flex flex-wrap gap-4">
+        <button
+          id="open-chat-hero"
+          class="bg-accent text-white font-bold uppercase tracking-widest text-sm px-8 py-4"
+        >
+          Book Free Consult
+        </button>
+        <button class="border border-navy text-navy font-bold uppercase tracking-widest text-sm px-8 py-4">
+          Free Guide
+        </button>
+      </div>
+    </main>
+
+    <!-- Chat modal -->
+    <div
+      id="chat-modal-overlay"
+      class="hidden fixed inset-0 bg-black/50 z-40 items-center justify-center p-4"
+    >
+      <div class="bg-white w-full max-w-md h-[80vh] flex flex-col shadow-2xl">
+        <div class="flex items-start justify-between px-5 py-4 border-b border-gray-200">
+          <div>
+            <p class="font-bold text-navy">Let's get your call ready</p>
+            <p class="text-xs text-gray-500 mt-1">
+              A quick chat before you book — a few questions, then you're set.
+            </p>
+          </div>
+          <button id="close-chat" class="text-2xl leading-none px-2 text-gray-400 hover:text-navy" aria-label="Close">
+            &times;
+          </button>
+        </div>
+
+        <div id="chat-messages" class="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-3"></div>
+
+        <div id="chat-input-row" class="border-t border-gray-200 p-3 flex items-end gap-2">
+          <textarea
+            id="chat-input"
+            rows="2"
+            placeholder="Tell us what's going on..."
+            class="flex-1 resize-none border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-accent"
+          ></textarea>
+          <button
+            id="mic-button"
+            title="Hold to speak"
+            type="button"
+            class="shrink-0 w-10 h-10 flex items-center justify-center border border-gray-300 text-navy"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path
+                d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12h-2Z"
+              />
+            </svg>
+          </button>
+          <button
+            id="send-button"
+            type="button"
+            class="shrink-0 bg-accent text-white px-4 py-2 text-xs font-bold uppercase tracking-widest"
+          >
+            Send
+          </button>
+        </div>
+
+        <div id="calendly-container" class="hidden flex-1 overflow-y-auto"></div>
+      </div>
+    </div>
+
+    <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+    <script src="/app.js"></script>
+  </body>
+</html>

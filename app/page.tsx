@@ -1,25 +1,30 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Pill } from "@/components/Pill";
+
+const INTAKE_AGENT_URL = "https://intake-agent-production-fb75.up.railway.app";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-12 bg-white px-6">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-14 bg-wa-tint px-6 py-16">
       <Image
         src="/westaway-logo.png"
         alt="Westaway"
-        width={220}
-        height={56}
-        className="h-10 w-auto"
+        width={260}
+        height={64}
+        className="h-12 w-auto"
       />
-      <div className="grid gap-6 sm:grid-cols-2 w-full max-w-2xl">
+      <div className="grid gap-6 sm:grid-cols-3 w-full max-w-4xl">
         <Link
           href="/os/dashboard"
-          className="border border-wa-hair p-8 hover:border-wa-blue transition-colors"
+          className="group rounded-2xl bg-white border border-wa-hair p-8 shadow-sm hover:shadow-lg hover:-translate-y-0.5 hover:border-wa-blue/40 transition-all"
         >
-          <div className="text-wa-meta text-xs uppercase tracking-wide mb-2">
+          <Pill tone="outline" className="mb-4">
             Internal
-          </div>
-          <h2 className="text-xl mb-2">Westaway OS</h2>
+          </Pill>
+          <h2 className="text-xl text-wa-navy mb-2 group-hover:text-wa-blue transition-colors">
+            Westaway OS
+          </h2>
           <p className="text-wa-meta text-base">
             Dashboard, deal pipeline, meeting intelligence, and email triage
             for the Westaway team.
@@ -27,16 +32,35 @@ export default function Home() {
         </Link>
         <Link
           href="/onboard"
-          className="border border-wa-hair p-8 hover:border-wa-blue transition-colors"
+          className="group rounded-2xl bg-white border border-wa-hair p-8 shadow-sm hover:shadow-lg hover:-translate-y-0.5 hover:border-wa-blue/40 transition-all"
         >
-          <div className="text-wa-meta text-xs uppercase tracking-wide mb-2">
+          <Pill tone="muted" className="mb-4">
             Client-facing
-          </div>
-          <h2 className="text-xl mb-2">Westaway Onboarding</h2>
+          </Pill>
+          <h2 className="text-xl text-wa-navy mb-2 group-hover:text-wa-blue transition-colors">
+            Westaway Onboarding
+          </h2>
           <p className="text-wa-meta text-base">
             The guided onboarding experience for a new engagement.
           </p>
         </Link>
+        <a
+          href={INTAKE_AGENT_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group rounded-2xl bg-white border border-wa-hair p-8 shadow-sm hover:shadow-lg hover:-translate-y-0.5 hover:border-wa-blue/40 transition-all"
+        >
+          <Pill tone="success" className="mb-4">
+            Public
+          </Pill>
+          <h2 className="text-xl text-wa-navy mb-2 group-hover:text-wa-blue transition-colors">
+            Intake Concierge &nearr;
+          </h2>
+          <p className="text-wa-meta text-base">
+            The conversational intake widget prospects use in place of the
+            static Calendly form.
+          </p>
+        </a>
       </div>
     </div>
   );

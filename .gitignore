@@ -44,3 +44,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# intake-agent (Python/FastAPI service)
+intake-agent/.venv/
+intake-agent/venv/
+intake-agent/__pycache__/
+intake-agent/**/__pycache__/
+intake-agent/*.pyc
+intake-agent/data/*.jsonl
+node_modules/
