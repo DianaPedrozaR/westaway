@@ -29,8 +29,8 @@ export function Sidebar() {
           src="/westaway-logo.png"
           alt="Westaway"
           width={200}
-          height={50}
-          className="h-9 w-auto invert brightness-0"
+          height={75}
+          className="h-10 w-auto invert brightness-0"
         />
       </div>
       <nav className="flex flex-col gap-1 flex-grow px-4">

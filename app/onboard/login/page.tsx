@@ -8,9 +8,9 @@ export default function OnboardLoginPage() {
         <Image
           src="/westaway-logo.png"
           alt="Westaway"
-          width={220}
-          height={54}
-          className="h-9 w-auto"
+          width={240}
+          height={90}
+          className="h-11 w-auto"
         />
         <div>
           <h1 className="text-3xl">Welcome back.</h1>

@@ -18,9 +18,9 @@ export default async function GatePage({
           <Image
             src="/westaway-logo.png"
             alt="Westaway"
-            width={220}
-            height={54}
-            className="h-10 w-auto"
+            width={240}
+            height={90}
+            className="h-12 w-auto"
           />
         </div>
         <h1 className="text-2xl text-center mb-2">Restricted access</h1>

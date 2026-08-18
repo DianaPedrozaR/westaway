@@ -9,9 +9,9 @@ export default function FlowLayout({ children }: { children: React.ReactNode }) 
         <Image
           src="/westaway-logo.png"
           alt="Westaway"
-          width={150}
-          height={36}
-          className="h-8 w-auto"
+          width={200}
+          height={75}
+          className="h-9 w-auto"
         />
         <div className="text-wa-navy text-base font-medium">Employment Agreement Onboarding</div>
         <Link href="/onboard" className="text-wa-blue text-base font-medium">

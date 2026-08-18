@@ -97,3 +97,18 @@ model LegalMatter {
   date        DateTime?
   createdAt   DateTime  @default(now())
 }
+
+model IntakeLead {
+  id           String   @id @default(cuid())
+  sessionId    String   @unique
+  messages     String   @default("[]")
+  transcript   String   @default("[]")
+  researchBase String   @default("{}")
+  turnCount    Int      @default(0)
+  stage        String   @default("gathering")
+  pendingNudge String?
+  done         Boolean  @default(false)
+  routing      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

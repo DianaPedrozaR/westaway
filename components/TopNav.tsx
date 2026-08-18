@@ -24,9 +24,9 @@ export function TopNav({
       <Image
         src="/westaway-logo.png"
         alt="Westaway"
-        width={170}
-        height={40}
-        className="h-8 w-auto"
+        width={200}
+        height={75}
+        className="h-9 w-auto"
       />
       <nav className="flex gap-2 bg-wa-tint rounded-full p-1">
         {NAV_ITEMS.map(({ href, label }) => {

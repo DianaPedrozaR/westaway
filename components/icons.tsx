@@ -150,3 +150,12 @@ export function BriefcaseIcon({ className, size = 20 }: IconProps) {
     </svg>
   );
 }
+
+export function MicIcon({ className, size = 20 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className} {...base}>
+      <rect x="9" y="2" width="6" height="12" rx="3" />
+      <path d="M5 11a7 7 0 0 0 14 0M12 18v4M9 22h6" />
+    </svg>
+  );
+}

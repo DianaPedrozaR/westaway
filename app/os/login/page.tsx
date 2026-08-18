@@ -9,9 +9,9 @@ export default function OsLoginPage() {
         <Image
           src="/westaway-logo.png"
           alt="Westaway"
-          width={220}
-          height={54}
-          className="h-10 w-auto invert brightness-0"
+          width={240}
+          height={90}
+          className="h-12 w-auto invert brightness-0"
         />
       </div>
 
