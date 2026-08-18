@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum DealStage {
+  NEW
+  CALL_SCHEDULED
+  OPEN_QUESTIONS
+  FOLLOW_UP
+  WON
+  INVOICE_LOE_SENT
+  PAID
+  ONBOARDING
+  ONBOARDED
+  UNQUALIFIED
+  LOST
+}
+
+enum EngagementType {
+  PER_PROJECT
+  GENERAL_COUNSEL
+}
+
+enum OfferDraftedStatus {
+  PENDING
+  DONE
+}
+
+enum OfferSentStatus {
+  NA
+  ON_REVIEW
+  SENT
+}
+
+enum OnboardingStep {
+  UPLOAD
+  CHATBOT
+  PREFILL
+  REVIEW
+  SHEETS
+  DONE
+}
+
+model Deal {
+  id                 String              @id @default(cuid())
+  company            String
+  contact            String
+  stage              DealStage
+  lead               String
+  source             String
+  engagementType     EngagementType      @default(PER_PROJECT)
+  offerDrafted       OfferDraftedStatus  @default(PENDING)
+  offerSent          OfferSentStatus     @default(NA)
+  offerEmail         String?
+  productMatch       String?
+  productPrice       String?
+  roundStage         String?
+  employees          Int?
+  hq                 String?
+  founder            String?
+  founderYear        Int?
+  dealBriefSummary   String?
+  keyRisks           String?
+  suggestedQuestions String?
+  transcriptExcerpt  String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  onboardingCase     OnboardingCase?
+}
+
+model OnboardingCase {
+  id                  String         @id @default(cuid())
+  dealId              String?        @unique
+  deal                Deal?          @relation(fields: [dealId], references: [id])
+  companyName         String
+  employeeName        String
+  matterType          String         @default("Employment Agreement")
+  currentStep         OnboardingStep @default(UPLOAD)
+  uploadedDocs         String         @default("[]")
+  collectedParameters String?
+  messages            String         @default("[]")
+  pendingItems        String         @default("[]")
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+}
+
+model LegalMatter {
+  id          String    @id @default(cuid())
+  companyName String
+  matterName  String
+  status      String
+  date        DateTime?
+  createdAt   DateTime  @default(now())
+}
