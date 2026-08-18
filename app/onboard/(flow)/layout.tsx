@@ -1,18 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Stepper } from "@/components/Stepper";
+import { Logo } from "@/components/Logo";
 
 export default function FlowLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-wa-tint">
       <div className="sticky top-0 z-20 flex justify-between items-center px-14 py-5 bg-white/90 backdrop-blur-md border-b border-wa-hair">
-        <Image
-          src="/westaway-logo.png"
-          alt="Westaway"
-          width={200}
-          height={75}
-          className="h-9 w-auto"
-        />
+        <Logo className="text-lg" />
         <div className="text-wa-navy text-base font-medium">Employment Agreement Onboarding</div>
         <Link href="/onboard" className="text-wa-blue text-base font-medium">
           Save &amp; exit

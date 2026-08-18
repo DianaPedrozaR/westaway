@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Logo } from "./Logo";
 import {
   DashboardIcon,
   DocIcon,
@@ -22,43 +22,43 @@ const NAV_ITEMS = [
 export function Sidebar() {
   const pathname = usePathname();
 
+  // Outer wrapper stretches to the full height of the page (matching the
+  // main content column via flex's default align-stretch) so the navy
+  // background never runs out partway down a long page. The inner wrapper
+  // is what actually sticks to the viewport while scrolling.
   return (
-    <div className="w-72 min-w-72 self-start sticky top-0 h-screen bg-wa-navy flex flex-col py-8 overflow-y-auto">
-      <div className="px-8 pb-10">
-        <Image
-          src="/westaway-logo.png"
-          alt="Westaway"
-          width={200}
-          height={75}
-          className="h-10 w-auto invert brightness-0"
-        />
-      </div>
-      <nav className="flex flex-col gap-1 flex-grow px-4">
-        {NAV_ITEMS.map(({ href, label, Icon }) => {
-          const active = pathname.startsWith(href);
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={`flex items-center gap-3.5 px-4 py-3 text-[15px] rounded-xl ${
-                active
-                  ? "text-white bg-white/10 shadow-sm"
-                  : "text-[#B7C2ED] hover:text-white hover:bg-white/5"
-              }`}
-            >
-              <Icon className={active ? "text-wa-blue" : ""} />
-              {label}
-            </Link>
-          );
-        })}
-      </nav>
-      <div className="flex items-center gap-3 px-8 pt-5 mt-5 border-t border-white/10">
-        <div className="w-10 h-10 rounded-full bg-wa-blue text-white text-sm font-semibold flex items-center justify-center flex-shrink-0">
-          KW
+    <div className="w-72 min-w-72 bg-wa-navy">
+      <div className="sticky top-0 h-screen flex flex-col py-8 overflow-y-auto">
+        <div className="px-8 pb-10">
+          <Logo light className="text-xl" />
         </div>
-        <div>
-          <div className="text-white text-[15px]">Kyle Westaway</div>
-          <div className="text-[#93A0CC] text-xs">Principal Attorney</div>
+        <nav className="flex flex-col gap-1 flex-grow px-4">
+          {NAV_ITEMS.map(({ href, label, Icon }) => {
+            const active = pathname.startsWith(href);
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`flex items-center gap-3.5 px-4 py-3 text-[15px] rounded-xl ${
+                  active
+                    ? "text-white bg-white/10 shadow-sm"
+                    : "text-[#B7C2ED] hover:text-white hover:bg-white/5"
+                }`}
+              >
+                <Icon className={active ? "text-wa-blue" : ""} />
+                {label}
+              </Link>
+            );
+          })}
+        </nav>
+        <div className="flex items-center gap-3 px-8 pt-5 mt-5 border-t border-white/10">
+          <div className="w-10 h-10 rounded-full bg-wa-blue text-white text-sm font-semibold flex items-center justify-center flex-shrink-0">
+            KW
+          </div>
+          <div>
+            <div className="text-white text-[15px]">Kyle Westaway</div>
+            <div className="text-[#93A0CC] text-xs">Principal Attorney</div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { verifyPasscode } from "./actions";
 import { Button } from "@/components/Button";
+import { Logo } from "@/components/Logo";
 
 export default async function GatePage({
   searchParams,
@@ -15,13 +15,7 @@ export default async function GatePage({
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-wa-navy to-[#0d1640] p-8">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-12">
         <div className="mb-8 flex justify-center">
-          <Image
-            src="/westaway-logo.png"
-            alt="Westaway"
-            width={240}
-            height={90}
-            className="h-12 w-auto"
-          />
+          <Logo className="text-2xl" />
         </div>
         <h1 className="text-2xl text-center mb-2">Restricted access</h1>
         <p className="text-center text-wa-meta mb-8">

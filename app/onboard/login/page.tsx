@@ -1,17 +1,11 @@
-import Image from "next/image";
 import { LinkButton } from "@/components/Button";
+import { Logo } from "@/components/Logo";
 
 export default function OnboardLoginPage() {
   return (
     <div className="min-h-screen bg-wa-tint flex items-center justify-center p-8">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-wa-hair p-16 flex flex-col items-center gap-8 text-center">
-        <Image
-          src="/westaway-logo.png"
-          alt="Westaway"
-          width={240}
-          height={90}
-          className="h-11 w-auto"
-        />
+        <Logo className="text-2xl" />
         <div>
           <h1 className="text-3xl">Welcome back.</h1>
           <p className="text-wa-meta mt-2.5">

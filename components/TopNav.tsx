@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Logo } from "./Logo";
 
 const NAV_ITEMS = [
   { href: "/onboard", label: "Home" },
@@ -21,13 +21,7 @@ export function TopNav({
 
   return (
     <div className="sticky top-0 z-20 flex items-center justify-between px-14 py-5 bg-white/90 backdrop-blur-md border-b border-wa-hair">
-      <Image
-        src="/westaway-logo.png"
-        alt="Westaway"
-        width={200}
-        height={75}
-        className="h-9 w-auto"
-      />
+      <Logo className="text-lg" />
       <nav className="flex gap-2 bg-wa-tint rounded-full p-1">
         {NAV_ITEMS.map(({ href, label }) => {
           const active =

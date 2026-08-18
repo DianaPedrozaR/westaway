@@ -1,18 +1,12 @@
-import Image from "next/image";
 import { LockIcon } from "@/components/icons";
 import { LinkButton } from "@/components/Button";
+import { Logo } from "@/components/Logo";
 
 export default function OsLoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-wa-navy to-[#0d1640] flex items-center justify-center relative p-8">
       <div className="absolute top-0 left-0 right-0 px-14 py-10">
-        <Image
-          src="/westaway-logo.png"
-          alt="Westaway"
-          width={240}
-          height={90}
-          className="h-12 w-auto invert brightness-0"
-        />
+        <Logo light className="text-2xl" />
       </div>
 
       <div className="flex w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden">
