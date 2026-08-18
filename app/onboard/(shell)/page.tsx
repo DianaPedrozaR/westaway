@@ -19,16 +19,13 @@ export default async function OnboardHomePage() {
         <p className="text-lg text-wa-meta">
           Follow these steps to get started. If you have questions, contact us.
         </p>
-        <LinkButton href="/onboard/upload" size="lg" className="mt-2">
-          Start Onboarding
-        </LinkButton>
       </div>
 
-      <div className="bg-white rounded-2xl border border-wa-hair shadow-sm px-8 py-6 flex items-center gap-6">
+      <div className="bg-white rounded-2xl border border-wa-hair shadow-sm px-8 py-6 flex items-center gap-6 w-full max-w-xl">
         <div className="w-12 h-12 rounded-xl bg-wa-blue-light flex items-center justify-center flex-shrink-0">
           <DocIcon className="text-wa-blue" size={22} />
         </div>
-        <div className="text-left">
+        <div className="text-left flex-grow">
           <div className="text-lg text-wa-navy font-medium">
             {activeCase?.matterType ?? "Employment Agreement"}
           </div>
@@ -36,6 +33,9 @@ export default async function OnboardHomePage() {
             Flat fee &middot; $1,200 &middot; {activeCase?.employeeName ?? "New hire"}
           </div>
         </div>
+        <LinkButton href="/onboard/upload" size="lg" className="flex-shrink-0">
+          Start Onboarding
+        </LinkButton>
       </div>
     </div>
   );

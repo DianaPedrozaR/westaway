@@ -100,8 +100,12 @@ model LegalMatter {
 }
 
 model IntakeLead {
-  id           String   @id @default(cuid())
-  sessionId    String   @unique
+  id              String   @id @default(cuid())
+  sessionId       String   @unique
+  prospectName    String?
+  prospectEmail   String?
+  prospectTitle   String?
+  prospectCompany String?
   messages     String   @default("[]")
   transcript   String   @default("[]")
   researchBase String   @default("{}")

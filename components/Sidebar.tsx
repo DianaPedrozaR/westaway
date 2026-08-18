@@ -28,7 +28,7 @@ export function Sidebar() {
   // is what actually sticks to the viewport while scrolling.
   return (
     <div className="w-72 min-w-72 bg-wa-navy">
-      <div className="sticky top-0 h-screen flex flex-col py-8 overflow-y-auto">
+      <div className="sticky top-10 h-[calc(100vh-2.5rem)] flex flex-col py-8 overflow-y-auto">
         <div className="px-8 pb-10">
           <Logo light className="text-xl" />
         </div>

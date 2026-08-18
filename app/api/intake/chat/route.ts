@@ -14,15 +14,13 @@ import {
   parseIntakeJson,
 } from "@/lib/intake";
 
-const CALENDLY_URLS: Record<string, string | undefined> = {
-  kyle: process.env.CALENDLY_KYLE_URL,
-  stephanie: process.env.CALENDLY_STEPHANIE_URL,
-};
+type ProspectInfo = { name: string; email: string; title: string; company: string };
 
 export async function POST(request: NextRequest) {
-  const { sessionId, message } = (await request.json()) as {
+  const { sessionId, message, prospect } = (await request.json()) as {
     sessionId?: string;
     message: string;
+    prospect?: ProspectInfo;
   };
 
   if (!process.env.ANTHROPIC_API_KEY) {
@@ -39,7 +37,13 @@ export async function POST(request: NextRequest) {
   const lead =
     existing ??
     (await prisma.intakeLead.create({
-      data: { sessionId: crypto.randomUUID() },
+      data: {
+        sessionId: crypto.randomUUID(),
+        prospectName: prospect?.name,
+        prospectEmail: prospect?.email,
+        prospectTitle: prospect?.title,
+        prospectCompany: prospect?.company,
+      },
     }));
 
   const priorMessages = parseIntakeJson<Anthropic.MessageParam[]>(lead.messages, []);
@@ -49,6 +53,18 @@ export async function POST(request: NextRequest) {
   let turnCount = lead.turnCount + 1;
 
   const contentBlocks: Anthropic.TextBlockParam[] = [];
+  // Only the very first turn — the intro form already told us who they are,
+  // so the concierge should use it instead of asking again.
+  if (!existing && lead.prospectName) {
+    contentBlocks.push({
+      type: "text",
+      text:
+        `<context>The founder already gave us their info via an intro form: ` +
+        `name "${lead.prospectName}", title "${lead.prospectTitle || "unknown"}", ` +
+        `company "${lead.prospectCompany || "unknown"}". Use it naturally (e.g. their first ` +
+        `name) and don't ask for it again.</context>`,
+    });
+  }
   if (lead.pendingNudge) {
     contentBlocks.push({ type: "text", text: `<context>${lead.pendingNudge}</context>` });
   }
@@ -114,7 +130,6 @@ export async function POST(request: NextRequest) {
 
   const done = ready;
   const routing = done ? determineRouting(researchBase) : null;
-  const calendlyUrl = done ? CALENDLY_URLS[routing ?? ""] || null : null;
 
   // A completed conversation becomes a real Deal in the OS Pipeline — the
   // concierge and Westaway OS are one system, not two, so this connection
@@ -123,8 +138,8 @@ export async function POST(request: NextRequest) {
   if (done && !dealId) {
     const deal = await prisma.deal.create({
       data: {
-        company: researchBase.entity_name || "New prospect lead",
-        contact: "Pending intro call",
+        company: lead.prospectCompany || researchBase.entity_name || "New prospect lead",
+        contact: lead.prospectName || "Pending intro call",
         stage: "NEW",
         lead: routing === "kyle" ? "Kyle" : "Stephanie",
         source: "Intake Concierge",
@@ -157,6 +172,5 @@ export async function POST(request: NextRequest) {
     turn: turnCount,
     done,
     routing,
-    calendlyUrl,
   });
 }

@@ -69,3 +69,17 @@
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(4rem, 3rem) scale(1.08);
+  }
+}
+
+.animate-drift {
+  animation: drift 22s ease-in-out infinite;
+}

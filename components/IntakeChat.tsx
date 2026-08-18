@@ -1,31 +1,41 @@
 "use client";
 
-import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/Button";
-import { MicIcon } from "@/components/icons";
+import { MicIcon, SendIcon } from "@/components/icons";
+import { FakeCalendly } from "@/components/FakeCalendly";
+import type { ProspectInfo } from "@/components/IntakeContactForm";
 
 type ChatTurn = { role: "user" | "assistant"; text: string };
 
-const OPENING_LINE =
-  "Hi! I'm here to get our team ready for your call. What's going on — type below, or hold the mic to talk it through.";
+const MAX_TEXTAREA_HEIGHT = 120;
 
-export function IntakeChat() {
+export function IntakeChat({ prospect }: { prospect: ProspectInfo }) {
+  const firstName = prospect.name.trim().split(/\s+/)[0] || "there";
+  const openingLine = `Hi ${firstName}! I'm here to get our team ready for your call. What's going on — type below, or hold the mic to talk it through.`;
+
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<ChatTurn[]>([{ role: "assistant", text: OPENING_LINE }]);
+  const [messages, setMessages] = useState<ChatTurn[]>([{ role: "assistant", text: openingLine }]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
-  const [calendlyUrl, setCalendlyUrl] = useState<string | null>(null);
+  const [routing, setRouting] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [recording, setRecording] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const baseTextRef = useRef("");
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, MAX_TEXTAREA_HEIGHT)}px`;
+  }, [input]);
 
   useEffect(() => {
     const SpeechRecognitionCtor: SpeechRecognitionConstructor | undefined =
@@ -79,7 +89,13 @@ export function IntakeChat() {
       const res = await fetch("/api/intake/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId, message: text }),
+        body: JSON.stringify({
+          sessionId,
+          message: text,
+          // Only meaningful on the very first call, when the server creates
+          // the IntakeLead row — ignored afterward.
+          prospect: sessionId ? undefined : prospect,
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "bad response");
@@ -88,7 +104,7 @@ export function IntakeChat() {
       setMessages((prev) => [...prev, { role: "assistant", text: data.reply }]);
       if (data.done) {
         setDone(true);
-        setCalendlyUrl(data.calendlyUrl ?? null);
+        setRouting(data.routing ?? null);
       }
     } catch {
       setError("Sorry, something went wrong on our end — please try that again.");
@@ -98,8 +114,8 @@ export function IntakeChat() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4 max-h-[55vh] overflow-y-auto pr-1">
+    <div className="flex flex-col h-full">
+      <div className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-4 pr-1">
         {messages.map((m, i) =>
           m.role === "assistant" ? (
             <div key={i} className="flex gap-3 items-start">
@@ -127,62 +143,58 @@ export function IntakeChat() {
         <div ref={bottomRef} />
       </div>
 
-      {error && <div className="text-wa-red text-sm">{error}</div>}
+      {error && <div className="text-wa-red text-sm mt-4">{error}</div>}
 
-      {done ? (
-        calendlyUrl ? (
-          <>
-            <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="afterInteractive" />
-            <div
-              className="calendly-inline-widget rounded-2xl overflow-hidden border border-wa-hair"
-              data-url={calendlyUrl}
-              style={{ minWidth: "280px", height: "560px" }}
-            />
-          </>
+      <div className="pt-4 flex-shrink-0">
+        {done ? (
+          <FakeCalendly rep={routing} email={prospect.email} />
         ) : (
-          <div className="rounded-2xl bg-wa-green-light border border-wa-green/20 px-5 py-4 text-wa-navy">
-            Thanks — that&rsquo;s everything our team needs. We&rsquo;ll follow up shortly to get
-            your call on the books.
+          <div className="flex gap-3 items-end">
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  send();
+                }
+              }}
+              rows={1}
+              placeholder="Tell us what's going on..."
+              disabled={sending}
+              className="flex-grow resize-none overflow-y-auto rounded-xl border-[1.5px] border-wa-hair px-4 py-3 text-lg text-wa-navy outline-none focus:border-wa-blue"
+              style={{ minHeight: "48px", maxHeight: `${MAX_TEXTAREA_HEIGHT}px` }}
+            />
+            <button
+              type="button"
+              title="Hold to speak"
+              disabled={sending || !recognitionRef.current}
+              onMouseDown={startRecording}
+              onMouseUp={stopRecording}
+              onMouseLeave={stopRecording}
+              onTouchStart={startRecording}
+              onTouchEnd={stopRecording}
+              className={`shrink-0 w-12 h-12 rounded-xl flex items-center justify-center border-[1.5px] transition-colors disabled:opacity-40 ${
+                recording
+                  ? "bg-wa-red text-white border-wa-red"
+                  : "bg-white text-wa-navy border-wa-hair hover:border-wa-navy"
+              }`}
+            >
+              <MicIcon size={18} />
+            </button>
+            <button
+              type="button"
+              title="Send"
+              onClick={send}
+              disabled={sending || !input.trim()}
+              className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center bg-wa-blue text-white hover:bg-wa-navy transition-colors disabled:opacity-40"
+            >
+              <SendIcon size={18} />
+            </button>
           </div>
-        )
-      ) : (
-        <div className="flex gap-3">
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                send();
-              }
-            }}
-            rows={2}
-            placeholder="Tell us what's going on..."
-            disabled={sending}
-            className="flex-grow resize-none rounded-xl border-[1.5px] border-wa-hair px-4 py-3 text-lg text-wa-navy outline-none focus:border-wa-blue"
-          />
-          <button
-            type="button"
-            title="Hold to speak"
-            disabled={sending || !recognitionRef.current}
-            onMouseDown={startRecording}
-            onMouseUp={stopRecording}
-            onMouseLeave={stopRecording}
-            onTouchStart={startRecording}
-            onTouchEnd={stopRecording}
-            className={`shrink-0 w-12 h-12 rounded-xl flex items-center justify-center border-[1.5px] transition-colors disabled:opacity-40 ${
-              recording
-                ? "bg-wa-red text-white border-wa-red"
-                : "bg-white text-wa-navy border-wa-hair hover:border-wa-navy"
-            }`}
-          >
-            <MicIcon size={18} />
-          </button>
-          <Button onClick={send} disabled={sending || !input.trim()} size="lg">
-            Send
-          </Button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
