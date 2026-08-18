@@ -14,12 +14,13 @@ export default async function GatePage({
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-wa-navy to-[#0d1640] p-8">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-12">
-        <div className="mb-8 flex justify-center">
+        <div className="mb-8 flex justify-center items-baseline gap-1.5">
           <Logo className="text-2xl" />
+          <span className="text-2xl font-bold text-wa-blue">OS</span>
         </div>
-        <h1 className="text-2xl text-center mb-2">Restricted access</h1>
+        <h1 className="text-2xl text-center mb-2">Sign in to Westaway OS</h1>
         <p className="text-center text-wa-meta mb-8">
-          Enter the passcode to continue to Westaway.
+          Enter the shared passcode to continue.
         </p>
         <form action={verifyPasscode} className="flex flex-col gap-4">
           <input type="hidden" name="next" value={next} />

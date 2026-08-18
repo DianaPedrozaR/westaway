@@ -116,6 +116,26 @@ export async function POST(request: NextRequest) {
   const routing = done ? determineRouting(researchBase) : null;
   const calendlyUrl = done ? CALENDLY_URLS[routing ?? ""] || null : null;
 
+  // A completed conversation becomes a real Deal in the OS Pipeline — the
+  // concierge and Westaway OS are one system, not two, so this connection
+  // has to be a fact in the data, not just a claim in the UI.
+  let dealId = lead.dealId;
+  if (done && !dealId) {
+    const deal = await prisma.deal.create({
+      data: {
+        company: researchBase.entity_name || "New prospect lead",
+        contact: "Pending intro call",
+        stage: "NEW",
+        lead: routing === "kyle" ? "Kyle" : "Stephanie",
+        source: "Intake Concierge",
+        engagementType: researchBase.engagement_type === "ongoing_gc" ? "GENERAL_COUNSEL" : "PER_PROJECT",
+        dealBriefSummary: researchBase.core_matter || researchBase.hard_question || null,
+        transcriptExcerpt: transcript.map((t) => `${t.role === "user" ? "Founder" : "Concierge"}: ${t.text}`).join("\n"),
+      },
+    });
+    dealId = deal.id;
+  }
+
   await prisma.intakeLead.update({
     where: { id: lead.id },
     data: {
@@ -127,6 +147,7 @@ export async function POST(request: NextRequest) {
       pendingNudge,
       done,
       routing,
+      dealId,
     },
   });
 

@@ -71,6 +71,7 @@ model Deal {
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   onboardingCase     OnboardingCase?
+  intakeLead         IntakeLead?
 }
 
 model OnboardingCase {
@@ -109,6 +110,8 @@ model IntakeLead {
   pendingNudge String?
   done         Boolean  @default(false)
   routing      String?
+  dealId       String?  @unique
+  deal         Deal?    @relation(fields: [dealId], references: [id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
