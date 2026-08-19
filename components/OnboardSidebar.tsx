@@ -3,24 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
-import {
-  DashboardIcon,
-  UploadIcon,
-  SparkleIcon,
-  DocIcon,
-  CheckIcon,
-  ColumnsIcon,
-  FlagIcon,
-  BriefcaseIcon,
-} from "./icons";
+import { DashboardIcon, FlagIcon, BriefcaseIcon } from "./icons";
 
 const NAV_ITEMS = [
   { href: "/onboard", label: "Home", Icon: DashboardIcon, exact: true },
-  { href: "/onboard/upload", label: "Upload", Icon: UploadIcon },
-  { href: "/onboard/chat", label: "Chatbot", Icon: SparkleIcon },
-  { href: "/onboard/prefill", label: "Pre-fill", Icon: DocIcon },
-  { href: "/onboard/review", label: "Review", Icon: CheckIcon },
-  { href: "/onboard/sheets", label: "Sheets", Icon: ColumnsIcon },
   { href: "/onboard/pending", label: "Pending", Icon: FlagIcon },
   { href: "/onboard/legal-matters", label: "Legal Matters", Icon: BriefcaseIcon },
 ];
@@ -28,9 +14,11 @@ const NAV_ITEMS = [
 export function OnboardSidebar({
   clientName = "Nimbus Robotics, Inc.",
   clientContact = "Jordan A. Rivera",
+  showSaveExit = false,
 }: {
   clientName?: string;
   clientContact?: string;
+  showSaveExit?: boolean;
 }) {
   const pathname = usePathname();
   const initials = clientName
@@ -67,14 +55,16 @@ export function OnboardSidebar({
             );
           })}
         </nav>
-        <div className="px-4">
-          <Link
-            href="/onboard"
-            className="flex items-center justify-center gap-2 rounded-xl border border-white/15 text-white/80 hover:text-white hover:border-white/30 text-sm font-medium py-2.5"
-          >
-            Save &amp; exit
-          </Link>
-        </div>
+        {showSaveExit && (
+          <div className="px-4">
+            <Link
+              href="/onboard"
+              className="flex items-center justify-center gap-2 rounded-xl border border-white/15 text-white/80 hover:text-white hover:border-white/30 text-sm font-medium py-2.5"
+            >
+              Save &amp; exit
+            </Link>
+          </div>
+        )}
         <div className="flex items-center gap-3 px-8 pt-5 mt-5 border-t border-white/10">
           <div className="w-10 h-10 rounded-full bg-wa-blue text-white text-sm font-semibold flex items-center justify-center flex-shrink-0">
             {initials}
